@@ -4,10 +4,12 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+channels = "*"
 django = "*"
 django-debug-toolbar = "*"
 pillow = "*"
-channels = "*"
+crispy-bootstrap4 = "*"
+django-crispy-forms = "*"
 
 [dev-packages]
 

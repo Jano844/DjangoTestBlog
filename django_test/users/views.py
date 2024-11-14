@@ -7,18 +7,35 @@ from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 
 # Create your views here.
 
+# def register(request):
+#     if request.method == 'POST':
+#         form = UserRegisterForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             username = form.cleaned_data.get('username')
+#             messages.success(request, f'Your accout has been created you can now login!')
+#             return redirect('login')
+
+#     else:
+#         form = UserRegisterForm()
+#     return render(request, 'users/register.html', {'form': form})
+from .models import Profile
+
+
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()  # Only saves the User instance; Profile creation is handled by the signal
             username = form.cleaned_data.get('username')
-            messages.success(request, f'Your accout has been created you can now login!')
+            messages.success(request, f'Your account has been created! You can now log in!')
             return redirect('login')
-
     else:
         form = UserRegisterForm()
+    
     return render(request, 'users/register.html', {'form': form})
+
+
 
 from django.contrib.auth import logout
 

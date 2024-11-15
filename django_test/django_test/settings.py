@@ -35,6 +35,8 @@ INSTALLED_APPS = [
 	'chat.apps.ChatConfig',
     'blog.apps.BlogConfig',
     'users.apps.UsersConfig',
+    'channels',
+    'daphne',
     'crispy_forms',
     'crispy_bootstrap4',
     'django.contrib.admin',
@@ -149,3 +151,10 @@ LOGIN_URL = 'login'
 
 
 
+ASGI_APPLICATION = 'django_test.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}

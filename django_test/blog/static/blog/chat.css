@@ -61,7 +61,7 @@
     margin: 20px auto; /* Zentriert das Container */
     padding: 10px;
     background-color: #f4f4f4; /* Heller Hintergrund */
-    border-radius: 8px; /* Abgerundete Ecken */
+    border-radius: 20px; /* Abgerundete Ecken */
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Leichter Schatten für das Design */
 }
 
@@ -73,7 +73,7 @@
 }
 
 /* Textarea für die Nachricht */
-textarea {
+#id_message_send_input {
     width: 100%; /* Füllt den restlichen Platz im Container */
     padding: 10px;
     font-size: 16px;

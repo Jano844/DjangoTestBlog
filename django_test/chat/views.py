@@ -20,4 +20,4 @@ def chat_view(request):
     messages = Chat.objects.all().order_by('-date_posted')[:100]
     messages = list(messages)
     messages.reverse()
-    return render(request, 'chat/chat_copy.html', {'form': form, 'messages': messages})
+    return render(request, 'chat/chat.html', {'form': form, 'messages': messages})

@@ -49,11 +49,7 @@
         </nav>
     </header>
 
-
-    <h1>{{ request.user.username }}</h1>
-
     <div id="chat-data" data-username="{{ request.user.username }}"></div>
-
 
 
 
@@ -89,10 +85,10 @@
 
 
 
-            <div class="chat__item__container" id="id_chat_item_container"style="font-size: 20px">
+            <div class="input-container" id="id_chat_item_container"style="font-size: 20px">
                 <br />
-                <input type="text" id="id_message_send_input" />
-                <button type="submit" id="id_message_send_button">Send Message</button>
+                <input class="messageInput" type="text" id="id_message_send_input" />
+                <button class="send-button" type="submit" id="id_message_send_button">&#10132;</button>
                 <br />
                 <br />
           </div>
@@ -151,8 +147,15 @@
         console.log("Received data:", data);
 
         // Neues Haupt-Div für die Nachricht erstellen
+        var username = document.querySelector("#chat-data").getAttribute("data-username");
         var messageBoxDiv = document.createElement("div");
-        messageBoxDiv.className = "message-box-you";
+
+        if (data.username == username)
+          messageBoxDiv.className = "message-box-you";
+        else
+          messageBoxDiv.className = "message-box-other"
+
+        // messageBoxDiv.className = "message-box-you";
 
         // Inneres Hintergrund-Div erstellen
         var messageBackgroundDiv = document.createElement("div");

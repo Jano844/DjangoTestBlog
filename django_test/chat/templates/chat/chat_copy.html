@@ -48,20 +48,11 @@
           </div>
         </nav>
     </header>
-
-
-    <h1>{{ request.user.username }}</h1>
-
-    <div id="chat-data" data-username="{{ request.user.username }}"></div>
-
-
-
-
-
-    <!-- Html fuer Text Chat -->
     <main role="main" class="container">
         <div class="row">
         <div class="col-md-8">
+
+            <!-- Letzten 10 messegaes ausgeben: -->
             <div id="messages">
                 {% for message in messages %}
                     {% if message.author.username != request.user.username  %}
@@ -82,112 +73,86 @@
                 {% empty %}
                     <p>Keine Nachrichten vorhanden.</p>
                 {% endfor %}
-                <div id="id_other_container"></div>
             </div>
 
+            <!-- Formular zum Absenden einer Nachricht -->
+            <div class="messageInput">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="input-container">
+                        <!-- Textarea für die Nachricht -->
+                        <textarea id="message" name="message" placeholder="Gib deine Nachricht ein..." rows="1"></textarea>
+                        <button type="submit" class="send-button">
+                            <span>➡</span> <!-- Pfeil oder ein Symbol für den Button -->
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Html fuer Text Chat -->
 
 
-
-
-            <div class="chat__item__container" id="id_chat_item_container"style="font-size: 20px">
-                <br />
-                <input type="text" id="id_message_send_input" />
-                <button type="submit" id="id_message_send_button">Send Message</button>
-                <br />
-                <br />
-          </div>
-
-
-
-
-
-
-
+        </div>
+        <div class="col-md-4">
+            <div class="content-section">
+            <h3>Our Sidebar</h3>
+            <p class='text-muted'>You can put any information here you'd like.
+                <ul class="list-group">
+                <li class="list-group-item list-group-item-light">Latest Posts</li>
+                <li class="list-group-item list-group-item-light">Announcements</li>
+                <li class="list-group-item list-group-item-light">Calendars</li>
+                <li class="list-group-item list-group-item-light">etc</li>
+                </ul>
+            </p>
+            </div>
         </div>
         </div>
     </main>
 
-
-
-
-
-
+    <!-- Java Script fuer Text Chat -->
     <script>
-      function scrollToBottom() {
+        // von anfang an nach unten scrollen
+        function scrollToBottom() {
             var messagesDiv = document.getElementById('messages');
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
         window.onload = scrollToBottom;
 
+        document.getElementById("message").addEventListener("keydown", function(event) {
+            if (event.key === "Enter" && !event.shiftKey) {  // Enter ohne Shift-Kombination
+                event.preventDefault(); // Verhindert den Zeilenumbruch
+                this.form.submit(); // Sendet das Formular ab
+            }
+        });
 
+        // live Chat 
         const chatSocket = new WebSocket("ws://" + window.location.host + "/");
         chatSocket.onopen = function (e) {
-          console.log("The connection was setup successfully !");
+            console.log("The connection was setup successfully !");
         };
         chatSocket.onclose = function (e) {
-          console.log("Something unexpected happened !");
+            console.log("Something unexpected happened !");
         };
         document.querySelector("#id_message_send_input").focus();
         document.querySelector("#id_message_send_input").onkeyup = function (e) {
-          if (e.keyCode == 13) {
-            document.querySelector("#id_message_send_button").click();
-          }
+            if (e.keyCode == 13) {
+                document.querySelector("#id_message_send_button").click();
+            }
         };
-
-        document.querySelector("#id_message_send_button").onclick = function (e)
-        {
-            var messageInput = document.querySelector("#id_message_send_input").value;
-            var username = document.querySelector("#chat-data").getAttribute("data-username");
-
-            console.log("Username:", username);
-            chatSocket.send(JSON.stringify({ message: messageInput, username: username }));
+        document.querySelector("#id_message_send_button").onclick = function (e) {
+            var messageInput = document.querySelector(
+                "#id_message_send_input"
+            ).value;
+            chatSocket.send(JSON.stringify({ message: messageInput, username : "{{request.user.username}}"}));
         };
-
-        
-      chatSocket.onmessage = function (e)
-      {
-        const data = JSON.parse(e.data);
-
-        console.log("Received data:", data);
-
-        // Neues Haupt-Div für die Nachricht erstellen
-        var messageBoxDiv = document.createElement("div");
-        messageBoxDiv.className = "message-box-you";
-
-        // Inneres Hintergrund-Div erstellen
-        var messageBackgroundDiv = document.createElement("div");
-        messageBackgroundDiv.className = "message-background";
-
-        // Author-Element erstellen
-        var authorParagraph = document.createElement("p");
-        authorParagraph.className = "author";
-        authorParagraph.textContent = data.username;
-
-        // Nachrichten-Text-Element erstellen
-        var messageParagraph = document.createElement("p");
-        messageParagraph.className = "message-text";
-        messageParagraph.textContent = data.message;
-
-        // Elemente verschachteln
-        messageBackgroundDiv.appendChild(authorParagraph);
-        messageBackgroundDiv.appendChild(messageParagraph);
-        messageBoxDiv.appendChild(messageBackgroundDiv);
-
-        // Nachrichteneingabe leeren
-        document.querySelector("#id_message_send_input").value = "";
-
-        // Nachricht in ein anderes Ziel-Div hinzufügen
-        const targetContainer = document.querySelector("#id_other_container"); // ID des gewünschten Containers
-        if (targetContainer) {
-              targetContainer.appendChild(messageBoxDiv);
-          } else {
-              console.error("Ziel-Container nicht gefunden!");
-        }
-        scrollToBottom();
-      };
-
-
-      </script>
+        chatSocket.onmessage = function (e) {
+            const data = JSON.parse(e.data);
+            var div = document.createElement("div");
+            div.innerHTML = data.username + " : " + data.message;
+            document.querySelector("#id_message_send_input").value = "";
+            document.querySelector("#id_chat_item_container").appendChild(div);
+        };
+    </script>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -198,14 +163,5 @@
 </html>
 
 
-
-
-<!-- <div class="article-metadata" id="id_chat_item_container" style="font-size: 20px">
-    <br />
-    <input type="text" id="id_message_send_input" />
-    <button type="submit" id="id_message_send_button">Send Message</button>
-    <br />
-    <br />
-</div> -->
 
 

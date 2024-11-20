@@ -1,0 +1,16 @@
+{%extends "chat/base.html"%}
+{% block content %}
+	<main role="main" class="container">
+		<div class="row">
+			<div class="col-md-8">
+				<div id="messages">
+					{% for room in rooms %}
+						<a href="{% url 'room_detail' room.id %}" class="ChatButtonBackground">
+							{{ room.groupName }}
+						</a>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</main>
+{% endblock content %}

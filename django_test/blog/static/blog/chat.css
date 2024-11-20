@@ -121,3 +121,25 @@
         padding: 8px;
     }
 }
+
+
+
+/* Chat Button */
+.ChatButtonBackground {
+    text-align: left;
+    background-color: rgb(114, 114, 114); /* Dunkler Hintergrund */
+    color: white; /* Weißer Text */
+    display: block; /* Damit der Button als Block angezeigt wird */
+    width: 100%; /* Nimmt die gesamte verfügbare Breite des Containers ein */
+    padding: 10px; /* Polsterung innerhalb des Buttons */
+    border-radius: 18px; /* Abgerundete Ecken */
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); /* Optional: leichter Schatten */
+    max-width: 100%; /* Verhindert, dass der Button die Container-Breite überschreitet */
+    word-wrap: break-word; /* Lange Wörter werden umgebrochen */
+    border: none; /* Keine sichtbare Umrandung */
+    cursor: pointer; /* Zeigt an, dass es ein klickbares Element ist */
+}
+
+.ChatButtonBackground:hover {
+    background-color:grey;
+}

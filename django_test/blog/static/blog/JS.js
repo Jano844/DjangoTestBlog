@@ -31,49 +31,49 @@ document.querySelector("#id_message_send_button").onclick = function (e)
 
 chatSocket.onmessage = function (e)
 {
-const data = JSON.parse(e.data);
+	const data = JSON.parse(e.data);
 
-console.log("Received data:", data);
+	console.log("Received data:", data);
 
-// Neues Haupt-Div für die Nachricht erstellen
-var username = document.querySelector("#chat-data").getAttribute("data-username");
-var messageBoxDiv = document.createElement("div");
+	// Neues Haupt-Div für die Nachricht erstellen
+	var username = document.querySelector("#chat-data").getAttribute("data-username");
+	var messageBoxDiv = document.createElement("div");
 
-if (data.username == username)
-  messageBoxDiv.className = "message-box-you";
-else
-  messageBoxDiv.className = "message-box-other"
+	if (data.username == username)
+		messageBoxDiv.className = "message-box-you";
+	else
+		messageBoxDiv.className = "message-box-other"
 
-// messageBoxDiv.className = "message-box-you";
+	// messageBoxDiv.className = "message-box-you";
 
-// Inneres Hintergrund-Div erstellen
-var messageBackgroundDiv = document.createElement("div");
-messageBackgroundDiv.className = "message-background";
+	// Inneres Hintergrund-Div erstellen
+	var messageBackgroundDiv = document.createElement("div");
+	messageBackgroundDiv.className = "message-background";
 
-// Author-Element erstellen
-var authorParagraph = document.createElement("p");
-authorParagraph.className = "author";
-authorParagraph.textContent = data.username;
+	// Author-Element erstellen
+	var authorParagraph = document.createElement("p");
+	authorParagraph.className = "author";
+	authorParagraph.textContent = data.username;
 
-// Nachrichten-Text-Element erstellen
-var messageParagraph = document.createElement("p");
-messageParagraph.className = "message-text";
-messageParagraph.textContent = data.message;
+	// Nachrichten-Text-Element erstellen
+	var messageParagraph = document.createElement("p");
+	messageParagraph.className = "message-text";
+	messageParagraph.textContent = data.message;
 
-// Elemente verschachteln
-messageBackgroundDiv.appendChild(authorParagraph);
-messageBackgroundDiv.appendChild(messageParagraph);
-messageBoxDiv.appendChild(messageBackgroundDiv);
+	// Elemente verschachteln
+	messageBackgroundDiv.appendChild(authorParagraph);
+	messageBackgroundDiv.appendChild(messageParagraph);
+	messageBoxDiv.appendChild(messageBackgroundDiv);
 
-// Nachrichteneingabe leeren
-document.querySelector("#id_message_send_input").value = "";
+	// Nachrichteneingabe leeren
+	document.querySelector("#id_message_send_input").value = "";
 
-// Nachricht in ein anderes Ziel-Div hinzufügen
-const targetContainer = document.querySelector("#id_other_container"); // ID des gewünschten Containers
-if (targetContainer) {
-	  targetContainer.appendChild(messageBoxDiv);
-  } else {
-	  console.error("Ziel-Container nicht gefunden!");
-}
-scrollToBottom();
+	// Nachricht in ein anderes Ziel-Div hinzufügen
+	const targetContainer = document.querySelector("#id_other_container"); // ID des gewünschten Containers
+	if (targetContainer) {
+		targetContainer.appendChild(messageBoxDiv);
+	} else {
+		console.error("Ziel-Container nicht gefunden!");
+	}
+	scrollToBottom();
 };

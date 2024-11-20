@@ -1,79 +1,93 @@
 function scrollToBottom() {
-	var messagesDiv = document.getElementById('messages');
-	messagesDiv.scrollTop = messagesDiv.scrollHeight;
+	const messagesDiv = document.getElementById('messages');
+	if (messagesDiv) {
+		messagesDiv.scrollTop = messagesDiv.scrollHeight;
+	} else {
+		console.error("Messages-Div nicht gefunden!");
+	}
 }
+
 window.onload = scrollToBottom;
 
+const chatData = document.querySelector("#chat-data");
+if (!chatData) {
+	console.error("Chat-Daten nicht gefunden!");
+	throw new Error("Chat-Daten fehlen.");
+}
 
-const chatSocket = new WebSocket("ws://" + window.location.host + "/");
-chatSocket.onopen = function (e) {
-  console.log("The connection was setup successfully !");
+const roomID = chatData.getAttribute("data-room-id");
+const chatSocket = new WebSocket(`ws://${window.location.host}/ws/chat/${roomID}/`);
+
+chatSocket.onopen = function () {
+	console.log("Die Verbindung wurde erfolgreich hergestellt!");
 };
-chatSocket.onclose = function (e) {
-  console.log("Something unexpected happened !");
+
+chatSocket.onclose = function () {
+	console.log("Die Verbindung wurde unerwartet geschlossen.");
 };
+
 document.querySelector("#id_message_send_input").focus();
 document.querySelector("#id_message_send_input").onkeyup = function (e) {
-  if (e.keyCode == 13) {
-	document.querySelector("#id_message_send_button").click();
-  }
+	if (e.keyCode === 13) {
+		document.querySelector("#id_message_send_button").click();
+	}
 };
 
-document.querySelector("#id_message_send_button").onclick = function (e)
-{
-	var messageInput = document.querySelector("#id_message_send_input").value;
-	var username = document.querySelector("#chat-data").getAttribute("data-username");
+document.querySelector("#id_message_send_button").onclick = function () {
+	const messageInput = document.querySelector("#id_message_send_input").value.trim();
+	if (!messageInput) {
+		console.warn("Leere Nachrichten können nicht gesendet werden.");
+		return;
+	}
+
+	const username = chatData.getAttribute("data-username");
+	const room_name = chatData.getAttribute("data-room-name");
 
 	console.log("Username:", username);
-	chatSocket.send(JSON.stringify({ message: messageInput, username: username }));
+	console.log("Message:", messageInput);
+	console.log("Room Name:", room_name);
+	console.log("Room ID:", roomID);
+
+	chatSocket.send(JSON.stringify({
+		message: messageInput,
+		username: username,
+		room_name: room_name,
+		room_id: roomID,
+	}));
+
+	document.querySelector("#id_message_send_input").value = "";
 };
 
-
-chatSocket.onmessage = function (e)
-{
+chatSocket.onmessage = function (e) {
 	const data = JSON.parse(e.data);
+	console.log("Empfangene Daten:", data);
 
-	console.log("Received data:", data);
+	const username = chatData.getAttribute("data-username");
+	const messageBoxDiv = document.createElement("div");
 
-	// Neues Haupt-Div für die Nachricht erstellen
-	var username = document.querySelector("#chat-data").getAttribute("data-username");
-	var messageBoxDiv = document.createElement("div");
+	messageBoxDiv.className = data.username === username ? "message-box-you" : "message-box-other";
 
-	if (data.username == username)
-		messageBoxDiv.className = "message-box-you";
-	else
-		messageBoxDiv.className = "message-box-other"
-
-	// messageBoxDiv.className = "message-box-you";
-
-	// Inneres Hintergrund-Div erstellen
-	var messageBackgroundDiv = document.createElement("div");
+	const messageBackgroundDiv = document.createElement("div");
 	messageBackgroundDiv.className = "message-background";
 
-	// Author-Element erstellen
-	var authorParagraph = document.createElement("p");
+	const authorParagraph = document.createElement("p");
 	authorParagraph.className = "author";
 	authorParagraph.textContent = data.username;
 
-	// Nachrichten-Text-Element erstellen
-	var messageParagraph = document.createElement("p");
+	const messageParagraph = document.createElement("p");
 	messageParagraph.className = "message-text";
 	messageParagraph.textContent = data.message;
 
-	// Elemente verschachteln
 	messageBackgroundDiv.appendChild(authorParagraph);
 	messageBackgroundDiv.appendChild(messageParagraph);
 	messageBoxDiv.appendChild(messageBackgroundDiv);
 
-	// Nachrichteneingabe leeren
-	document.querySelector("#id_message_send_input").value = "";
-
-	// Nachricht in ein anderes Ziel-Div hinzufügen
-	const targetContainer = document.querySelector("#id_other_container"); // ID des gewünschten Containers
+	const targetContainer = document.querySelector("#id_other_container");
 	if (targetContainer) {
 		targetContainer.appendChild(messageBoxDiv);
 	} else {
 		console.error("Ziel-Container nicht gefunden!");
 	}
+
 	scrollToBottom();
 };

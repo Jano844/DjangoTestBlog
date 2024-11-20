@@ -30,7 +30,7 @@ def show_all_chats(request):
 
 def room_detail(request, room_id):
     group = Group.objects.get(id=room_id)
-    test = group.messages.all().order_by('-date_posted')
+    messages = group.messages.all().order_by('date_posted')
 
     # print(test.group.groupName)
-    return render(request, 'chat/ChatRoom.html', {'messages': test})
+    return render(request, 'chat/ChatRoom.html', {'messages': messages, 'group': group, 'room_id': room_id})

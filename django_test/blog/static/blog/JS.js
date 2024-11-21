@@ -26,8 +26,8 @@ chatSocket.onclose = function () {
 	console.log("Die Verbindung wurde unerwartet geschlossen.");
 };
 
-document.querySelector(".messageInput").focus();
-document.querySelector(".messageInput").onkeyup = function (e) {
+document.querySelector("#messageInputChat").focus();
+document.querySelector("#messageInputChat").onkeyup = function (e) {
 	if (e.keyCode === 13) {
 		document.querySelector("#id_message_send_button").click();
 	}
@@ -35,8 +35,7 @@ document.querySelector(".messageInput").onkeyup = function (e) {
 
 
 document.querySelector("#id_message_send_button").onclick = function () {
-	console.log("HelloWorld")
-	const messageInput = document.querySelector(".messageInput").value.trim();
+	const messageInput = document.querySelector("#messageInputChat").value.trim();
 	if (!messageInput) {
 		console.warn("Leere Nachrichten können nicht gesendet werden.");
 		return;
@@ -44,6 +43,8 @@ document.querySelector("#id_message_send_button").onclick = function () {
 
 	const username = chatData.getAttribute("data-username");
 	const room_name = chatData.getAttribute("data-room-name");
+	const roomID = chatData.getAttribute("data-room-id");
+	const use = "chat_message";
 
 	console.log("Username:", username);
 	console.log("Message:", messageInput);
@@ -51,13 +52,15 @@ document.querySelector("#id_message_send_button").onclick = function () {
 	console.log("Room ID:", roomID);
 
 	chatSocket.send(JSON.stringify({
+		use: use,
 		message: messageInput,
 		username: username,
 		room_name: room_name,
 		room_id: roomID,
 	}));
 
-	document.querySelector(".messageInput").value = "";
+	console.log("Nachricht gesendet:", messageInput);
+	document.querySelector("#messageInputChat").value = "";
 };
 
 
@@ -97,36 +100,35 @@ chatSocket.onmessage = function (e) {
 
 
 
-document.querySelector(".messageInput").focus();
-document.querySelector(".messageInput").onkeyup = function (e) {
+document.querySelector("#messageInputAddUser").focus();
+document.querySelector("#messageInputAddUser").onkeyup = function (e) {
 	if (e.keyCode === 13) {
 		document.querySelector("#add_user_button").click();
 	}
 };
 
 document.querySelector("#add_user_button").onclick = function () {
-	console.log("HelloWorld")
-	const messageInput = document.querySelector(".messageInput").value.trim();
-	console.log("Input", messageInput)
+	const messageInput = document.querySelector("#messageInputAddUser").value.trim();
 	if (!messageInput) {
 		console.warn("Leere Nachrichten können nicht gesendet werden.");
 		return;
 	}
 
+	const use = "add User";
 	const username = chatData.getAttribute("data-username");
 	const room_name = chatData.getAttribute("data-room-name");
+	const roomID = chatData.getAttribute("data-room-id");
 
-	console.log("Username:", username);
-	console.log("Message:", messageInput);
-	console.log("Room Name:", room_name);
-	console.log("Room ID:", roomID);
 
-	// chatSocket.send(JSON.stringify({
-	// 	message: messageInput,
-	// 	username: username,
-	// 	room_name: room_name,
-	// 	room_id: roomID,
-	// }));
+	chatSocket.send(JSON.stringify({
+		use: use,
+		username: username,
+		message: messageInput,
+		room_name: room_name,
+		room_id: roomID,
+	}));
 
-	document.querySelector(".messageInput").value = "";
+	// Benutzer hinzufügen ...
+	console.log("Benutzer hinzugefügt:", messageInput);
+	document.querySelector("#messageInputAddUser").value = "";
 };

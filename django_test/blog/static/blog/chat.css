@@ -166,6 +166,7 @@
 	word-wrap: break-word; /* Lange Wörter werden umgebrochen */
 	border: none; /* Keine sichtbare Umrandung */
 	cursor: pointer; /* Zeigt an, dass es ein klickbares Element ist */
+	margin-bottom: 5px;
 }
 
 .ChatButtonBackground:hover {

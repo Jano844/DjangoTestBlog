@@ -115,3 +115,60 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
 		except User.DoesNotExist:
 			print("User doesnt Exist")
+
+
+
+
+
+
+
+class NewChat(AsyncWebsocketConsumer):
+	async def connect(self):
+		# Erstelle eine eindeutige Gruppennamen (kann optional verwendet werden)
+		self.group_name = "new_chat_group"
+
+		# Tritt der Gruppe bei
+		await self.channel_layer.group_add(
+			self.group_name,
+			self.channel_name
+		)
+
+		await self.accept()  # Akzeptiere die WebSocket-Verbindung
+
+	async def disconnect(self, close_code):
+		# Verlasse die Gruppe, wenn die Verbindung getrennt wird
+		await self.channel_layer.group_discard(
+			self.group_name,
+			self.channel_name
+		)
+
+	async def receive(self, text_data):
+		# Verarbeite empfangene Nachrichten vom WebSocket
+		text_data_json = json.loads(text_data)
+		groupname = text_data_json['groupname']
+		username = text_data_json['username']
+
+		# Optionale Datenbankoperation: Speichere Nachricht
+		if username and groupname:
+			user = await sync_to_async(User.objects.get)(username=username)
+			if user:
+				# Beispiel: Nachricht in der Datenbank speichern
+				group = await sync_to_async(Group.objects.create)(groupName=groupname)
+				await sync_to_async(group.members.add)(user)
+
+		# Nachricht an die Gruppe senden
+		await self.channel_layer.group_send(
+			self.group_name,
+			{
+				"type": "chat_message",
+				"groupname": groupname,
+				"username": username,
+			}
+		)
+
+	async def chat_message(self, event):
+		# Sende die Nachricht an den WebSocket
+		await self.send(text_data=json.dumps({
+			"groupname": event["groupname"],
+			"username": event["username"],
+		}))

@@ -26,15 +26,17 @@ chatSocket.onclose = function () {
 	console.log("Die Verbindung wurde unerwartet geschlossen.");
 };
 
-document.querySelector("#id_message_send_input").focus();
-document.querySelector("#id_message_send_input").onkeyup = function (e) {
+document.querySelector(".messageInput").focus();
+document.querySelector(".messageInput").onkeyup = function (e) {
 	if (e.keyCode === 13) {
 		document.querySelector("#id_message_send_button").click();
 	}
 };
 
+
 document.querySelector("#id_message_send_button").onclick = function () {
-	const messageInput = document.querySelector("#id_message_send_input").value.trim();
+	console.log("HelloWorld")
+	const messageInput = document.querySelector(".messageInput").value.trim();
 	if (!messageInput) {
 		console.warn("Leere Nachrichten können nicht gesendet werden.");
 		return;
@@ -55,8 +57,9 @@ document.querySelector("#id_message_send_button").onclick = function () {
 		room_id: roomID,
 	}));
 
-	document.querySelector("#id_message_send_input").value = "";
+	document.querySelector(".messageInput").value = "";
 };
+
 
 chatSocket.onmessage = function (e) {
 	const data = JSON.parse(e.data);
@@ -90,4 +93,40 @@ chatSocket.onmessage = function (e) {
 	}
 
 	scrollToBottom();
+};
+
+
+
+document.querySelector(".messageInput").focus();
+document.querySelector(".messageInput").onkeyup = function (e) {
+	if (e.keyCode === 13) {
+		document.querySelector("#add_user_button").click();
+	}
+};
+
+document.querySelector("#add_user_button").onclick = function () {
+	console.log("HelloWorld")
+	const messageInput = document.querySelector(".messageInput").value.trim();
+	console.log("Input", messageInput)
+	if (!messageInput) {
+		console.warn("Leere Nachrichten können nicht gesendet werden.");
+		return;
+	}
+
+	const username = chatData.getAttribute("data-username");
+	const room_name = chatData.getAttribute("data-room-name");
+
+	console.log("Username:", username);
+	console.log("Message:", messageInput);
+	console.log("Room Name:", room_name);
+	console.log("Room ID:", roomID);
+
+	// chatSocket.send(JSON.stringify({
+	// 	message: messageInput,
+	// 	username: username,
+	// 	room_name: room_name,
+	// 	room_id: roomID,
+	// }));
+
+	document.querySelector(".messageInput").value = "";
 };

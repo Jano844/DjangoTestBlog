@@ -21,3 +21,4 @@ document.querySelectorAll('#Info_Button').forEach(button => {
 // 	// Navigiere zur neuen URL
 // 	window.location.href = newUrl;
 // })
+

@@ -34,7 +34,7 @@
 			</div>
 			<div class="input-container" id="id_chat_item_container"style="font-size: 20px">
 				<br />
-				<input class="messageInput" type="text" id="id_message_send_input" />
+				<input class="messageInput" type="text" />
 				<button class="send-button" type="submit" id="id_message_send_button">&#10132;</button>
 				<br />
 			</div>
@@ -48,9 +48,11 @@
 							<li class="list-group-item list-group-item-light">{{ member }}</li>
 						{% endfor %}
 					</ul>
-					<a class="add_user" href="/chat/{{ room_id }}/add/">Add user +
+					<input class="messageInput" type="text" />
+					<button class="add_user" type="submit" id="add_user_button">Add user +</button>
+					<!-- <a class="add_user" href="/chat/{{ room_id }}/add/">Add user +
 						{{ room_id }}
-					</a>
+					</a> -->
 				</p>
 			</div>
 		</div>

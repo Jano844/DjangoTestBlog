@@ -146,7 +146,6 @@
 	text-align: center; /* Zentriert den Text */
 	cursor: pointer; /* Zeigt den Zeiger-Cursor an, um den Klick-Charakter anzuzeigen */
 	transition: all 0.3s ease; /* Fügt eine sanfte Übergangsanimation hinzu */
-	margin-top: 10px;
 }
 
 .add_user:hover {

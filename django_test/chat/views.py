@@ -1,6 +1,7 @@
 # chat/views.py
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from .models import Group
 from .forms import ChatForm
 from django.http import HttpResponse
@@ -49,6 +50,7 @@ def room_detail(request, room_id):
 
 def add_users(request, room_id):
     user = request.user
+    all_users = User.objects.all()
     group = Group.objects.get(id=room_id)
     members = group.members.all()
 
@@ -59,5 +61,8 @@ def add_users(request, room_id):
             is_in_group = True
     if is_in_group == False:
         return redirect('chat')
+    
+    for test in all_users:
+        print(test)
 
-    return HttpResponse('<h1>HelloWorld</h1>')
+    return render(request, 'chat/add.html', {'users':all_users, 'members': members})

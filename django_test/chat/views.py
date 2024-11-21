@@ -47,22 +47,3 @@ def room_detail(request, room_id):
     # print(test.group.groupName)
     return render(request, 'chat/ChatRoom.html',
                    {'messages': messages, 'group': group, 'room_id': room_id , 'members': members})
-
-def add_users(request, room_id):
-    user = request.user
-    all_users = User.objects.all()
-    group = Group.objects.get(id=room_id)
-    members = group.members.all()
-
-    # checks if the user is in the Group he trys to access
-    is_in_group = False
-    for member in members:
-        if member == user:
-            is_in_group = True
-    if is_in_group == False:
-        return redirect('chat')
-    
-    for test in all_users:
-        print(test)
-
-    return render(request, 'chat/add.html', {'users':all_users, 'members': members})

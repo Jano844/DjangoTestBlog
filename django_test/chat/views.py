@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Group
 from .forms import ChatForm
+from django.http import HttpResponse
 
 # @login_required
 # def chat_view(request):
@@ -29,8 +30,34 @@ def show_all_chats(request):
     return render(request, 'chat/allChats.html', {'rooms':chat_rooms})
 
 def room_detail(request, room_id):
+    user = request.user
     group = Group.objects.get(id=room_id)
     messages = group.messages.all().order_by('date_posted')
+    members = group.members.all()
+
+    # checks if the user is in the Group he trys to access
+    is_in_group = False
+    for member in members:
+        if member == user:
+            is_in_group = True
+    if is_in_group == False:
+        return redirect('chat')
 
     # print(test.group.groupName)
-    return render(request, 'chat/ChatRoom.html', {'messages': messages, 'group': group, 'room_id': room_id})
+    return render(request, 'chat/ChatRoom.html',
+                   {'messages': messages, 'group': group, 'room_id': room_id , 'members': members})
+
+def add_users(request, room_id):
+    user = request.user
+    group = Group.objects.get(id=room_id)
+    members = group.members.all()
+
+    # checks if the user is in the Group he trys to access
+    is_in_group = False
+    for member in members:
+        if member == user:
+            is_in_group = True
+    if is_in_group == False:
+        return redirect('chat')
+
+    return HttpResponse('<h1>HelloWorld</h1>')

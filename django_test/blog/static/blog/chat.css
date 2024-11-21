@@ -134,6 +134,25 @@
 	padding: 10px;
 }
 
+.add_user {
+	display: inline-block; /* Macht den Link wie einen Button */
+	padding: 10px 20px; /* Fügt etwas Abstand hinzu */
+	font-size: 16px; /* Setzt die Schriftgröße */
+	color: green; /* Setzt die Schriftfarbe auf grün */
+	background-color: transparent; /* Hintergrund transparent */
+	border: 2px solid green; /* Grüner Rand (Outline) */
+	border-radius: 5px; /* Abgerundete Ecken */
+	text-decoration: none; /* Entfernt die Standard-Link-Unterstreichung */
+	text-align: center; /* Zentriert den Text */
+	cursor: pointer; /* Zeigt den Zeiger-Cursor an, um den Klick-Charakter anzuzeigen */
+	transition: all 0.3s ease; /* Fügt eine sanfte Übergangsanimation hinzu */
+	margin-top: 10px;
+}
+
+.add_user:hover {
+	background-color: green; /* Hintergrund wird grün bei Hover */
+	color: white; /* Textfarbe wird weiß bei Hover */
+}
 /* Chat Button */
 .ChatButtonBackground {
 	text-align: left;

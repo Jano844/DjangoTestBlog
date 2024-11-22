@@ -1,6 +1,5 @@
 {%extends "chat/base.html"%}
 {% block content %}
-	<div id = User-Name-Data data-username="{{ request.user.username }}"></div>
 	<main role="main" class="container">
 		<div class="row">
 			<div class="col-md-8">
@@ -22,10 +21,16 @@
 					<ul class="list-group">
 						<li class="list-group-item list-group-item-light">no spaces or extras</li>
 					</ul>
-					<input class="messageInput" id="messageInputNewGroup" type="text" />
-					<button class="add_user" type="submit" id="add_group_button">Add Group +</button>
+					<form method="POST" action="{% url 'chat' %}">
+						{% csrf_token %}
+						<!-- <label form="chat_name">Chat Name:</label> -->
+						<input class="messageInput" id="chat_name" type="text" name="chat_name" placeholder="Enter chat name"/>
+						<button class="add_user" type="submit">Add Group +</button>
+					</form>
 				</p>
 			</div>
 		</div>
 	</main>
 {% endblock content %}
+
+

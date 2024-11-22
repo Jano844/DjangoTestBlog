@@ -27,9 +27,19 @@ from django.http import HttpResponse
 @login_required
 def show_all_chats(request):
     user = request.user
+
+    if request.method == "POST":
+        chat_name = request.POST.get('chat_name', '').strip()
+        if chat_name:
+            group = Group.objects.create(groupName=chat_name)
+            group.members.add(user)
+            return redirect('chat')
+        else:
+            print("No Chat name")
     chat_rooms = user.chat_groups.all().order_by('date_created')
     return render(request, 'chat/allChats.html', {'rooms':chat_rooms})
 
+@login_required
 def room_detail(request, room_id):
     user = request.user
     group = Group.objects.get(id=room_id)

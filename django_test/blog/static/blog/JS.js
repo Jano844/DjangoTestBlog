@@ -15,17 +15,6 @@ if (!chatData) {
 	throw new Error("Chat-Daten fehlen.");
 }
 
-// Von hier
-const newGroupData = document.querySelector("#User-Name-Data");
-if (!newGroupData) {
-	console.error("Chat-Daten nicht gefunden!");
-	throw new Error("Chat-Daten fehlen.");
-}
-
-const chatSocketGroup = new WebSocket(`ws://${window.location.host}/ws/chat/`);
-
-// bis hier
-
 
 const roomID = chatData.getAttribute("data-room-id");
 const chatSocket = new WebSocket(`ws://${window.location.host}/ws/chat/${roomID}/`);

@@ -11,7 +11,7 @@
     <ul>
         {% for player in players_list %}
         <li>
-            <a href="{% url 'pong:player_details' player.id %}">
+            <a href="{% url 'game:player_details' player.id %}">
                 {{ player.name }}
             </a>
         </li>

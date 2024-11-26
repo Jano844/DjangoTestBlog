@@ -3,3 +3,5 @@ django-debug-toolbar
 pillow
 crispy-bootstrap4
 django-crispy-forms
+channels
+daphne

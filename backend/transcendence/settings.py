@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'game.apps.GameConfig',
 	'chat.apps.ChatConfig',
     'blog.apps.BlogConfig',
     'users.apps.UsersConfig',

@@ -1,5 +1,5 @@
 # """
-# ASGI config for django_test project.
+# ASGI config for transcendence project.
 
 # It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,7 +11,7 @@
 
 # from django.core.asgi import get_asgi_application
 
-# os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_test.settings')
+# os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'transcendence.settings')
 
 # application = get_asgi_application()
 

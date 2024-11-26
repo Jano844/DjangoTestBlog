@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Game Details</title>
+</head>
+
+<body>
+    {% block content %}
+    <div class="game-details">
+        <h2>Game Details</h2>
+        <h3>
+            <a href="{% url 'game:player_details' game.player1.id %}">
+                {{ game.player1.name }}
+            </a> vs <a href="{% url 'game:player_details' game.player2.id %}">
+                {{ game.player2.name }}
+            </a>
+        </h3>
+
+        <p>Score: {{ game.score1 }} - {{ game.score2 }}</p>
+        <p>Played at: {{ game.played_at }}</p>
+    </div>
+    {% endblock %}
+</body>
+
+</html>

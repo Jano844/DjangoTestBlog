@@ -1,10 +1,6 @@
-FROM python:3.12-alpine3.19
+FROM python:3.13.0-alpine3.20
 
 WORKDIR /code
-
-EXPOSE 8000
-
+RUN apk add postgresql-client
 COPY --chown=root:root . /code/
 RUN pip install -r requirements.txt
-
-ENTRYPOINT [ "/code/django.sh" ]
